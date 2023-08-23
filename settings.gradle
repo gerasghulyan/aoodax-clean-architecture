@@ -1,0 +1,29 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'aoodax-clean-architecture'
+
+include 'contract:model'
+include 'contract:boundary-input'
+include 'contract:boundary-output'
+include 'usecase:impl'
+include 'usecase:integration-test'
+include 'infrastructure:repository'
+include 'infrastructure:domain'
+include 'infrastructure:messaging'
+include 'configuration'
+include 'entrypoint:rest'
+include 'entrypoint:integration-test'
+include "test-toolkit:contract-unit"
+include "test-toolkit:entrypoint-unit"
+include "test-toolkit:infrastructure-unit"
+include "test-toolkit:integration"

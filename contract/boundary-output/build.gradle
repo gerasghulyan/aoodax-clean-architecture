@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(":contract:model")
+    implementation project(":infrastructure:domain")
+    api "org.springframework.boot:spring-boot-starter-data-mongodb"
+}

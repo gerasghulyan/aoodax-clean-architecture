@@ -1,0 +1,44 @@
+plugins {
+    id 'java.dependency-constraints'
+    id 'java.code-analysis'
+    id 'kotlin.integration'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.apache.commons:commons-lang3"
+    testImplementation "com.aoodax.jvm.common:unit-test"
+    testImplementation "org.mockito.kotlin:mockito-kotlin"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+test {
+    useJUnitPlatform()
+    reports {
+        junitXml.required = true
+    }
+    testLogging {
+        events = ['failed']
+        exceptionFormat = 'full'
+        showStandardStreams = false
+        showExceptions = true
+        showStackTraces = true
+        showCauses = true
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+task makePretty(type: Delete) {
+    delete "out"
+}

@@ -1,0 +1,3 @@
+dependencies {
+    api "com.aoodax.jvm.common:persistence-mongo"
+}

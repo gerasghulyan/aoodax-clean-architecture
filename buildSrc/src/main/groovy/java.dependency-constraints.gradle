@@ -1,0 +1,105 @@
+plugins {
+    id 'java'
+    id 'io.spring.dependency-management'
+}
+
+// spring boot version is defined in buildSrc/build.gradle; spring version is inferred from that.
+
+project.ext {
+    aoodaxCommonsMongoDbVersion = '1.0.0'
+    aoodaxCommonsUtilsVersion = '1.0.0'
+    aoodaxCommonsTestLocalstackVersion = '1.0.0'
+    aoodaxCommonsUnitTestVersion = '1.0.0'
+    aoodaxCommonsTestToolkitVersion = '1.0.0'
+    aoodaxCommonsQueueProducerVersion = '1.0.0'
+    aoodaxCommonsQueueMessageVersion = '1.0.0'
+    springCloudVersion = '2022.0.0'
+    messagingVersion = "2.2.6.RELEASE"
+    lombokVersion = '1.18.24'
+    springdocOpenapiVersion = '2.2.0'
+    springSecurityOauth2Version = '2.5.2.RELEASE'
+    resilience4jBulkheadVersion = '1.7.1'
+    mockserverClientJavaVersion = '5.11.2'
+    swaggerProjectVersion = '2.2.8'
+    jetbrainsAnnotationsVersion = '17.0.0'
+    commonsLang3Version = '3.12.0'
+    jakartaAnnotationVersion = '2.1.1'
+    findbugsJsr305Version = '3.0.2'
+    archunitJunit5Version = '1.0.0'
+    junitJupiterVersion = '5.9.0'
+    mockitoJunitJupiterVersion = '4.8.0'
+    mockitoKotlinVersion = '4.1.0'
+}
+
+repositories {
+    mavenLocal()
+//    maven {
+//        credentials {
+//            username System.getenv('REPOSITORY_USERNAME')
+//            password System.getenv('REPOSITORY_PASSWORD')
+//        }
+//        url "https://artifactory.domain.com/artifactory/maven-${getBranchName() == 'main' ? 'releases' : 'snapshots'}/"
+//    }
+    mavenCentral()
+}
+
+def environmentPlatformVersion(libraryVersion) {
+    def branch = getBranchName()
+    switch (branch) {
+        case "develop":
+            return "$libraryVersion-SNAPSHOT"
+        case "main":
+            return libraryVersion
+        default:
+            if (branch =~ /^release.*/) {
+                return "$libraryVersion-release-SNAPSHOT"
+            }
+            return "$libraryVersion-SNAPSHOT"
+    }
+}
+
+private String getBranchName() {
+    return "develop"
+//    System.getenv("ci_commit_branch") ?: grgit.getBranch().current().name //TODO uncomment
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+
+    constraints {
+        implementation "com.aoodax.jvm.common:utils:$aoodaxCommonsUtilsVersion"
+        implementation "com.aoodax.jvm.common:persistence-mongo:$aoodaxCommonsUtilsVersion"
+        implementation "com.aoodax.jvm.common:queue-producer:$aoodaxCommonsUtilsVersion"
+        implementation "com.aoodax.jvm.common:queue-message:$aoodaxCommonsUtilsVersion"
+        implementation "com.aoodax.jvm.common:test-toolkit:$aoodaxCommonsUtilsVersion"
+
+        implementation "jakarta.annotation:jakarta.annotation-api:$jakartaAnnotationVersion"
+        implementation "com.google.code.findbugs:jsr305:$findbugsJsr305Version"
+        implementation "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
+        implementation "io.github.resilience4j:resilience4j-bulkhead:$resilience4jBulkheadVersion"
+        implementation "org.apache.commons:commons-lang3:$commonsLang3Version"
+        implementation "io.swagger.core.v3:swagger-annotations-jakarta:$swaggerProjectVersion"
+        implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion"
+//        implementation "org.springframework.security.oauth:spring-security-oauth2:$springSecurityOauth2Version"
+//        implementation "org.springframework.cloud:spring-cloud-aws-messaging:${messagingVersion}"
+//        implementation "org.springframework.cloud:spring-cloud-starter-aws-messaging:${messagingVersion}"
+
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        testImplementation "com.aoodax.jvm.common:integration-test-localstack:${environmentPlatformVersion(aoodaxCommonsTestLocalstackVersion)}"
+        testImplementation "com.aoodax.jvm.common:unit-test:${environmentPlatformVersion(aoodaxCommonsUnitTestVersion)}"
+        testImplementation "com.aoodax.jvm.common:test-toolkit:${environmentPlatformVersion(aoodaxCommonsTestToolkitVersion)}"
+        testImplementation "org.mockito:mockito-junit-jupiter:$mockitoJunitJupiterVersion"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
+        testImplementation "com.tngtech.archunit:archunit-junit5:$archunitJunit5Version"
+        testRuntimeOnly "oFrg.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
+        testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
+    }
+}

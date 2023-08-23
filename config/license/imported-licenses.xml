@@ -1,0 +1,43 @@
+<topic>
+    <chunk>
+        <chapter title="Libraries whose license was not automatically identified">
+            <table>
+                <tr>
+                    <!-- every non-empty chapter must have a title row, which is stripped -->
+                    <th>Name</th>
+                    <th>Version</th>
+                    <th>License</th>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://github.com/netty/netty-tcnative">io.netty:netty-tcnative-classes</a>
+                    </td>
+                    <td>2.0.46.Final</td>
+                    <td>
+                        <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://github.com/spring-projects/spring-boot">
+                            org.springframework.boot:spring-boot-dependencies
+                        </a>
+                    </td>
+                    <td>2.6.2</td>
+                    <td>
+                        <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="https://github.com/luben/zstd-jni">com.github.luben:zstd-jni</a>
+                    </td>
+                    <td>2.6.2</td>
+                    <td>
+                        <a href="https://opensource.org/licenses/0BSD">BSD Zero Clause License</a>
+                    </td>
+                </tr>
+            </table>
+        </chapter>
+    </chunk>
+</topic>

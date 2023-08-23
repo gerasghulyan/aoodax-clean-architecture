@@ -1,0 +1,69 @@
+plugins {
+    id 'checkstyle'
+    id 'pmd'
+    id 'com.github.spotbugs'
+    id 'jacoco'
+}
+
+def mainAnalysisEnabled = project.hasProperty('mainStaticAnalysisEnabled')
+        ? mainStaticAnalysisEnabled.toBoolean()
+        : true
+
+checkstyleMain.enabled = mainAnalysisEnabled
+spotbugsMain.enabled = mainAnalysisEnabled
+pmdMain.enabled = mainAnalysisEnabled
+
+def testAnalysisEnabled = project.hasProperty('testStaticAnalysisEnabled')
+        ? testStaticAnalysisEnabled.toBoolean()
+        : true
+spotbugsTest.enabled = testAnalysisEnabled
+checkstyleTest.enabled = testAnalysisEnabled
+pmdTest.enabled = testAnalysisEnabled
+
+spotbugs {
+    toolVersion = '4.7.3'
+    ignoreFailures = false
+    showStackTraces = false
+    showProgress = false
+    effort = 'default'
+    reportLevel = 'high'
+}
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+checkstyle {
+    configFile = rootProject.file("${rootDir}/config/checkstyle/checkstyle.xml")
+    toolVersion = '9.2'
+    ignoreFailures = false
+    showViolations = false
+}
+
+pmd {
+    ruleSetFiles = rootProject.files("${rootDir}/config/pmd/ruleset.xml")
+    ruleSets = [] // we want to remove the default rule set, so we can explicitly declare our own rules
+    toolVersion = '6.41.0'
+    ignoreFailures = false
+    rulesMinimumPriority = 4
+}
+
+jacoco {
+    toolVersion = '0.8.7'
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('reports/jacocoHtml')
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
+}

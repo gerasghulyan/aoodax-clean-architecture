@@ -1,0 +1,13 @@
+plugins {
+    id 'org.owasp.dependencycheck'
+}
+
+dependencyCheck {
+    skipTestGroups = true
+    formats = ['HTML', 'JSON']
+    failOnError = false
+    scanConfigurations = ['compileClasspath', 'runtimeClasspath']
+    data {
+        directory = "$rootDir/.dependency-check"
+    }
+}

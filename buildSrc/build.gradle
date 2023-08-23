@@ -1,0 +1,24 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+project.ext {
+    axionReleasePlugin = '1.13.6'
+    owaspCheckPlugin = '6.5.2'
+    spotbugsPlugin = '5.0.13'
+    gradleLicenseReport = '2.0'
+}
+
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    implementation "pl.allegro.tech.build:axion-release-plugin:$axionReleasePlugin" //Semantic Versioning rules
+    implementation "org.owasp:dependency-check-gradle:$owaspCheckPlugin"
+    implementation "com.github.spotbugs.snom:spotbugs-gradle-plugin:$spotbugsPlugin"
+    implementation "com.github.jk1:gradle-license-report:$gradleLicenseReport"
+    implementation "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+    implementation "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:$kotlinVersion"
+    implementation "org.jetbrains.kotlin.plugin.spring:org.jetbrains.kotlin.plugin.spring.gradle.plugin:$kotlinVersion"
+}

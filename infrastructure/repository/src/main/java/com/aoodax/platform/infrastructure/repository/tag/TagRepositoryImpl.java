@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -28,11 +29,11 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public TagEntity create(final TagModel model) {
-        assertNotNullParameterArgument(model, "TagModel");
+        assertNotNullParameterArgument(model, "model");
 
-        final TagEntity tag = TagModelDocumentMapper.toDocument(model);
-        log.debug("Persisting tag for entity: {}", tag);
-        return mongoOperations.save(tag);
+        final TagEntity entity = TagModelDocumentMapper.toDocument(model);
+        log.debug("Persisting tag for entity: {}", entity);
+        return mongoOperations.save(entity);
     }
 
     @Override
@@ -41,6 +42,7 @@ public class TagRepositoryImpl implements TagRepository {
 
         final Query query = new Query().addCriteria(
                 Criteria.where("_id").is(uid)
+                        .andOperator(Criteria.where("is_deleted").is(false))
         );
         return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class));
     }
@@ -51,9 +53,30 @@ public class TagRepositoryImpl implements TagRepository {
 
         final Query query = new Query().addCriteria(
                 Criteria.where("name").is(name)
+                        .andOperator(Criteria.where("is_deleted").is(false))
         );
         return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class));
     }
 
+    @Override
+    public Optional<TagEntity> markAsRemoved(final String uid) {
+        assertHasTextParameterArgument(uid, "uid");
 
+        return getByUid(uid).map(tagEntity -> {
+            tagEntity.setDeleted(true);
+            return mongoOperations.save(tagEntity);
+        });
+    }
+
+    @Override
+    public Optional<TagEntity> update(final TagModel model) {
+        assertNotNullParameterArgument(model, "model");
+        
+        final Update update = new Update();
+        update.set("name", model.getName());
+        return getByUid(model.getUid()).map(tagEntity -> {
+            tagEntity.setName(model.getName());
+            return mongoOperations.save(tagEntity);
+        });
+    }
 }

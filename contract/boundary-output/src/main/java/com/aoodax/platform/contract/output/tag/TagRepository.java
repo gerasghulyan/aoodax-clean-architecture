@@ -12,4 +12,8 @@ public interface TagRepository {
     Optional<TagEntity> getByUid(String uid);
 
     Optional<TagEntity> getByName(String name);
+
+    Optional<TagEntity> markAsRemoved(String uid);
+    
+    Optional<TagEntity> update(TagModel model);
 }

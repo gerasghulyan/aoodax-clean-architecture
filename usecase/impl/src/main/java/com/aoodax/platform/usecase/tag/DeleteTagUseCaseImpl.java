@@ -1,10 +1,11 @@
 package com.aoodax.platform.usecase.tag;
 
 import com.aoodax.platform.contract.input.exception.NotFoundException;
-import com.aoodax.platform.contract.input.tag.GetByIdTagUseCase;
+import com.aoodax.platform.contract.input.tag.DeleteTagUseCase;
 import com.aoodax.platform.contract.model.tag.TagModel;
 import com.aoodax.platform.contract.output.tag.TagRepository;
 import com.aoodax.platform.contract.output.tag.mapper.TagModelDocumentMapper;
+import com.aoodax.platform.infrastructure.domain.entity.organization.tag.TagEntity;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,17 +19,18 @@ import static java.lang.String.format;
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
-public class GetByIdTagUseCaseImpl implements GetByIdTagUseCase {
+public class DeleteTagUseCaseImpl implements DeleteTagUseCase {
 
     TagRepository tagRepository;
 
     @Override
-    public TagModel getById(final String uid) {
+    public TagModel delete(final String uid) {
         assertHasTextParameterArgument(uid, "uid");
 
-        log.debug("Retrieving tag for uid: {}", uid);
-        return tagRepository.getByUid(uid)
-                .map(TagModelDocumentMapper::toModel)
+        log.debug("Deleting tag for uid: {}", uid);
+        final TagEntity tagEntity = tagRepository.markAsRemoved(uid)
                 .orElseThrow(() -> new NotFoundException(format("The Tag not found for uid: %s", uid)));
+        log.debug("Tag Successfully deleted with entity: {}", tagEntity);
+        return TagModelDocumentMapper.toModel(tagEntity);
     }
 }

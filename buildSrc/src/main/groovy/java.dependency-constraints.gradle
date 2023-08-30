@@ -3,7 +3,7 @@ plugins {
     id 'io.spring.dependency-management'
 }
 
-// spring boot version is defined in buildSrc/build.gradle; spring version is inferred from that.
+// spring boot version is defined in buildSrc/build.gradle file, spring version is inferred from that.
 
 project.ext {
     aoodaxCommonsMongoDbVersion = '1.0.0'
@@ -33,34 +33,7 @@ project.ext {
 
 repositories {
     mavenLocal()
-//    maven {
-//        credentials {
-//            username System.getenv('REPOSITORY_USERNAME')
-//            password System.getenv('REPOSITORY_PASSWORD')
-//        }
-//        url "https://artifactory.domain.com/artifactory/maven-${getBranchName() == 'main' ? 'releases' : 'snapshots'}/"
-//    }
     mavenCentral()
-}
-
-def environmentPlatformVersion(libraryVersion) {
-    def branch = getBranchName()
-    switch (branch) {
-        case "develop":
-            return "$libraryVersion-SNAPSHOT"
-        case "main":
-            return libraryVersion
-        default:
-            if (branch =~ /^release.*/) {
-                return "$libraryVersion-release-SNAPSHOT"
-            }
-            return "$libraryVersion-SNAPSHOT"
-    }
-}
-
-private String getBranchName() {
-    return "develop"
-//    System.getenv("ci_commit_branch") ?: grgit.getBranch().current().name //TODO uncomment
 }
 
 dependencyManagement {
@@ -86,16 +59,13 @@ dependencies {
         implementation "org.apache.commons:commons-lang3:$commonsLang3Version"
         implementation "io.swagger.core.v3:swagger-annotations-jakarta:$swaggerProjectVersion"
         implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion"
-//        implementation "org.springframework.security.oauth:spring-security-oauth2:$springSecurityOauth2Version"
-//        implementation "org.springframework.cloud:spring-cloud-aws-messaging:${messagingVersion}"
-//        implementation "org.springframework.cloud:spring-cloud-starter-aws-messaging:${messagingVersion}"
 
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-        testImplementation "com.aoodax.jvm.common:integration-test-localstack:${environmentPlatformVersion(aoodaxCommonsTestLocalstackVersion)}"
-        testImplementation "com.aoodax.jvm.common:unit-test:${environmentPlatformVersion(aoodaxCommonsUnitTestVersion)}"
-        testImplementation "com.aoodax.jvm.common:test-toolkit:${environmentPlatformVersion(aoodaxCommonsTestToolkitVersion)}"
+        testImplementation "com.aoodax.jvm.common:integration-test-localstack:$aoodaxCommonsTestLocalstackVersion"
+        testImplementation "com.aoodax.jvm.common:unit-test:$aoodaxCommonsUnitTestVersion"
+        testImplementation "com.aoodax.jvm.common:test-toolkit:$aoodaxCommonsTestToolkitVersion"
         testImplementation "org.mockito:mockito-junit-jupiter:$mockitoJunitJupiterVersion"
         testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
         testImplementation "com.tngtech.archunit:archunit-junit5:$archunitJunit5Version"

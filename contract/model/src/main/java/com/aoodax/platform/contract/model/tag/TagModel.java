@@ -13,7 +13,7 @@ import static com.aoodax.jvm.common.utils.validation.ParameterValidator.assertNo
 public class TagModel {
 
     private final String uid;
-    private final String name;
+    private String name;
 
     @Builder
     public TagModel(
@@ -29,6 +29,10 @@ public class TagModel {
     public TagModel(final String name) {
         assertNotNullParameterArgument(name, "name");
         this.uid = UUID.randomUUID().toString();
+        this.name = name;
+    }
+
+    public void updateName(final String name) {
         this.name = name;
     }
 }

@@ -1,6 +1,6 @@
 package com.aoodax.platform.usecase.tag;
 
-import com.aoodax.platform.contract.input.exception.EntityAlreadyExistsException;
+import com.aoodax.platform.contract.input.exception.AlreadyExistsException;
 import com.aoodax.platform.contract.input.tag.CreateTagUseCase;
 import com.aoodax.platform.contract.input.tag.dto.CreateTagDto;
 import com.aoodax.platform.contract.model.tag.TagModel;
@@ -39,7 +39,7 @@ public class CreateTagUseCaseImpl implements CreateTagUseCase {
     private void validateDto(final CreateTagDto dto) {
         log.debug("Validating tag for dto: {}", dto);
         tagRepository.getByName(dto.getName()).ifPresent(tagEntity -> {
-            throw new EntityAlreadyExistsException(format("The Tag already exists for name: %s", dto.getName()));
+            throw new AlreadyExistsException(format("The Tag already exists for name: %s", dto.getName()));
         });
     }
 }

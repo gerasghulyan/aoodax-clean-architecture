@@ -1,8 +1,8 @@
 package com.aoodax.platform.entrypoint.rest.exception.handler;
 
-import com.aoodax.platform.contract.input.exception.EntityAlreadyExistsException;
-import com.aoodax.platform.contract.input.exception.EntityNotFoundException;
-import com.aoodax.platform.contract.input.exception.EntityValidationException;
+import com.aoodax.platform.contract.input.exception.AlreadyExistsException;
+import com.aoodax.platform.contract.input.exception.NotFoundException;
+import com.aoodax.platform.contract.input.exception.ValidationException;
 import com.aoodax.platform.entrypoint.rest.common.response.error.ErrorReasonResponseModel;
 import com.aoodax.platform.entrypoint.rest.common.response.error.ErrorResponseModel;
 import com.aoodax.platform.entrypoint.rest.common.response.error.ValidationErrorResponseModel;
@@ -54,23 +54,23 @@ public class ApplicationRestGlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(EntityValidationException.class)
+    @ExceptionHandler(ValidationException.class)
     @ResponseBody
-    public ErrorResponseModel handleValidationException(final EntityValidationException e) {
+    public ErrorResponseModel handleValidationException(final ValidationException e) {
         return getErrorResponseModel(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(EntityAlreadyExistsException.class)
+    @ExceptionHandler(AlreadyExistsException.class)
     @ResponseBody
-    public ErrorResponseModel handleResourceAlreadyExistException(final EntityAlreadyExistsException e) {
+    public ErrorResponseModel handleResourceAlreadyExistException(final AlreadyExistsException e) {
         return getErrorResponseModel(HttpStatus.CONFLICT, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(EntityNotFoundException.class)
+    @ExceptionHandler(NotFoundException.class)
     @ResponseBody
-    public ErrorResponseModel handleNotFoundException(final EntityNotFoundException e) {
+    public ErrorResponseModel handleNotFoundException(final NotFoundException e) {
         return getErrorResponseModel(HttpStatus.NOT_FOUND, e.getMessage());
     }
 

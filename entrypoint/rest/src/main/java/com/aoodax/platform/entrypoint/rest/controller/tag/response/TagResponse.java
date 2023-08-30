@@ -1,6 +1,6 @@
 package com.aoodax.platform.entrypoint.rest.controller.tag.response;
 
-import com.aoodax.platform.entrypoint.rest.common.response.uid.UidAwareResponse;
+import com.aoodax.jvm.common.rest.dto.response.uid.UidAwareResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;

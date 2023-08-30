@@ -8,16 +8,20 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 import static com.aoodax.jvm.common.utils.validation.ParameterValidator.assertHasTextParameterArgument;
 import static com.aoodax.jvm.common.utils.validation.ParameterValidator.assertNotNullParameterArgument;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Repository
 @Slf4j
@@ -41,8 +45,8 @@ public class TagRepositoryImpl implements TagRepository {
         assertHasTextParameterArgument(uid, "uid");
 
         final Query query = new Query().addCriteria(
-                Criteria.where("_id").is(uid)
-                        .andOperator(Criteria.where("is_deleted").is(false))
+                where("_id").is(uid)
+                        .andOperator(where("is_deleted").is(false))
         );
         return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class));
     }
@@ -52,8 +56,8 @@ public class TagRepositoryImpl implements TagRepository {
         assertHasTextParameterArgument(name, "name");
 
         final Query query = new Query().addCriteria(
-                Criteria.where("name").is(name)
-                        .andOperator(Criteria.where("is_deleted").is(false))
+                where("name").is(name)
+                        .andOperator(where("is_deleted").is(false))
         );
         return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class));
     }
@@ -78,5 +82,23 @@ public class TagRepositoryImpl implements TagRepository {
             tagEntity.setName(model.getName());
             return mongoOperations.save(tagEntity);
         });
+    }
+
+    @Override
+    public Page<TagEntity> find(final Pageable pageable) {
+        assertNotNullParameterArgument(pageable, "pageable");
+        
+        log.debug("Executing get tags method with page info - {}", pageable);
+        final Query query = new Query()
+                .with(Sort.by("createdAt").descending());
+        final long count = mongoOperations.count(query, TagEntity.class);
+        query.with(pageable);
+        final Page<TagEntity> page = PageableExecutionUtils.getPage(
+                mongoOperations.find(query, TagEntity.class),
+                pageable,
+                () -> count
+        );
+        log.debug("Successfully executed get tags with page info - {}", pageable);
+        return page;
     }
 }

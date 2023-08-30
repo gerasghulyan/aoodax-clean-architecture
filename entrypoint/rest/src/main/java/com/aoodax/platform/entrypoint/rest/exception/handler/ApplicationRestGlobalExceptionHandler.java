@@ -1,11 +1,11 @@
 package com.aoodax.platform.entrypoint.rest.exception.handler;
 
+import com.aoodax.jvm.common.rest.dto.response.error.ErrorReasonResponseModel;
+import com.aoodax.jvm.common.rest.dto.response.error.ErrorResponseModel;
+import com.aoodax.jvm.common.rest.dto.response.error.ValidationErrorResponseModel;
 import com.aoodax.platform.contract.input.exception.AlreadyExistsException;
 import com.aoodax.platform.contract.input.exception.NotFoundException;
 import com.aoodax.platform.contract.input.exception.ValidationException;
-import com.aoodax.platform.entrypoint.rest.common.response.error.ErrorReasonResponseModel;
-import com.aoodax.platform.entrypoint.rest.common.response.error.ErrorResponseModel;
-import com.aoodax.platform.entrypoint.rest.common.response.error.ValidationErrorResponseModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,16 +1,23 @@
 package com.aoodax.platform.entrypoint.rest.controller.tag;
 
+import com.aoodax.jvm.common.rest.dto.request.PageableRequest;
+import com.aoodax.jvm.common.rest.dto.response.uid.UidAwareResponse;
+import com.aoodax.platform.contract.input.common.PaginationAwareDto;
 import com.aoodax.platform.contract.input.tag.CreateTagUseCase;
 import com.aoodax.platform.contract.input.tag.DeleteTagUseCase;
+import com.aoodax.platform.contract.input.tag.FindTagsUseCase;
 import com.aoodax.platform.contract.input.tag.GetByIdTagUseCase;
 import com.aoodax.platform.contract.input.tag.UpdateTagUseCase;
 import com.aoodax.platform.contract.input.tag.dto.CreateTagDto;
+import com.aoodax.platform.contract.input.tag.dto.TagGridResponseDto;
 import com.aoodax.platform.contract.input.tag.dto.UpdateTagDto;
 import com.aoodax.platform.contract.model.tag.TagModel;
-import com.aoodax.platform.entrypoint.rest.common.response.uid.UidAwareResponse;
 import com.aoodax.platform.entrypoint.rest.controller.tag.request.CreateTagRequest;
 import com.aoodax.platform.entrypoint.rest.controller.tag.request.UpdateTagRequest;
+import com.aoodax.platform.entrypoint.rest.controller.tag.response.TagGridResponse;
 import com.aoodax.platform.entrypoint.rest.controller.tag.response.TagResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,25 +34,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.aoodax.jvm.common.utils.validation.ParameterValidator.assertNotNullParameterArgument;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
 @RestController
+@Tag(name = "Tags API")
 @RequestMapping("/v1/tags")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class TagController {
 
     CreateTagUseCase createTagUseCase;
     GetByIdTagUseCase getByIdTagUseCase;
+    FindTagsUseCase findTagsUseCase;
     UpdateTagUseCase updateTagUseCase;
     DeleteTagUseCase deleteTagUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(description = "Create")
     public UidAwareResponse create(@Valid @RequestBody final CreateTagRequest request) {
-        assertNotNullParameterArgument(request, "CreateTagRequest");
-
         log.info("Creating tag for request: {}", request);
         final CreateTagDto dto = CreateTagDto.builder()
                 .name(request.getName())
@@ -57,6 +66,7 @@ public class TagController {
 
     @GetMapping("/{uid}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(description = "Get by uid")
     public TagResponse getById(@Valid @PathVariable final String uid) {
         log.info("Retrieving tag for uid: {}", uid);
         final TagModel tag = getByIdTagUseCase.getById(uid);
@@ -64,8 +74,26 @@ public class TagController {
         return convertTagModelToResponse(tag);
     }
 
+    @PostMapping("find")
+    @Operation(description = "Find by Post")
+    @ResponseStatus(HttpStatus.OK)
+    public TagGridResponse find(@Valid @RequestBody final PageableRequest request) {
+        log.info("Retrieving all tags with pagination for request - {}", request);
+        final PaginationAwareDto paginationAwareDto = PaginationAwareDto.builder()
+                .page(request.getPage())
+                .size(request.getSize())
+                .build();
+        final TagGridResponseDto tags = findTagsUseCase.find(paginationAwareDto);
+        log.info("All tags with pagination successfully retrieved");
+        final List<TagResponse> tagsResponse = tags.getTags().stream()
+                .map(this::convertTagModelToResponse)
+                .collect(Collectors.toList());
+        return TagGridResponse.builder().data(tagsResponse).total(tags.getTotal()).build();
+    }
+
     @PutMapping("/{uid}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(description = "Update")
     public TagResponse update(@Valid @PathVariable final String uid, @Valid @RequestBody final UpdateTagRequest request) {
         log.info("Update tag for request: {}", request);
         final UpdateTagDto dto = UpdateTagDto.builder()
@@ -79,6 +107,7 @@ public class TagController {
 
     @DeleteMapping("/{uid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(description = "Delete")
     public TagResponse delete(@Valid @PathVariable final String uid) {
         log.info("Deleting tag for uid: {}", uid);
         final TagModel tag = deleteTagUseCase.delete(uid);

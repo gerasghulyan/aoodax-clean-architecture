@@ -2,6 +2,8 @@ package com.aoodax.platform.contract.output.tag;
 
 import com.aoodax.platform.contract.model.tag.TagModel;
 import com.aoodax.platform.infrastructure.domain.entity.organization.tag.TagEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -16,4 +18,6 @@ public interface TagRepository {
     Optional<TagEntity> markAsRemoved(String uid);
     
     Optional<TagEntity> update(TagModel model);
+
+    Page<TagEntity> find(final Pageable pageable);
 }

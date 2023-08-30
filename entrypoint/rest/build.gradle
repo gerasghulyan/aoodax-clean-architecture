@@ -1,13 +1,13 @@
 dependencies {
     implementation project(":contract:boundary-input")
     runtimeOnly project(":usecase:impl")
+    implementation "com.aoodax.jvm.common:rest-dto"
     implementation "io.swagger.core.v3:swagger-annotations-jakarta"
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-//    implementation "org.springframework.boot:spring-boot-starter-security"
-//    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
     implementation "org.springframework.boot:spring-boot-starter-validation"
-//    implementation "org.springframework.security.oauth:spring-security-oauth2"
 //    testApi project(":test-toolkit:entrypoint-unit")
 //    testImplementation project(":test-toolkit:contract-unit")
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
 }

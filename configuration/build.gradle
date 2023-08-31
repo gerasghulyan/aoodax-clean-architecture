@@ -9,7 +9,7 @@ jar {
 dependencies {
     implementation project(":contract")
     implementation project(":usecase")
-    implementation project(":entrypoint:rest")
+    implementation project(":entrypoint:rest:api")
     implementation project(":infrastructure")
     implementation "com.aoodax.jvm.common:persistence-mongo"
     implementation "com.aoodax.jvm.common:queue-producer"

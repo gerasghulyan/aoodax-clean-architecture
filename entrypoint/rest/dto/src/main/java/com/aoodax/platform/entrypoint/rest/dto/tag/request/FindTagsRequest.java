@@ -1,4 +1,4 @@
-package com.aoodax.platform.entrypoint.rest.controller.tag.request;
+package com.aoodax.platform.entrypoint.rest.dto.tag.request;
 
 import com.aoodax.jvm.common.rest.dto.request.PageableRequest;
 import lombok.Data;

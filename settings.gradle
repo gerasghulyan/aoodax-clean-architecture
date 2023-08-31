@@ -21,7 +21,10 @@ include 'infrastructure:repository'
 include 'infrastructure:domain'
 include 'infrastructure:messaging'
 include 'configuration'
-include 'entrypoint:rest'
+include 'entrypoint:rest:api'
+include 'entrypoint:rest:dto'
+include 'entrypoint:queue:consumer'
+include 'entrypoint:queue:message'
 include 'entrypoint:integration-test'
 include "test-toolkit:contract-unit"
 include "test-toolkit:entrypoint-unit"

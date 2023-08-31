@@ -1,4 +1,4 @@
-package com.aoodax.platform.entrypoint.rest.controller.tag.response;
+package com.aoodax.platform.entrypoint.rest.dto.tag.response;
 
 import com.aoodax.jvm.common.rest.dto.response.uid.UidAwareResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;

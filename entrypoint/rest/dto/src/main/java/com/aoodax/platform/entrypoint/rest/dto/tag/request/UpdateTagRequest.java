@@ -1,4 +1,4 @@
-package com.aoodax.platform.entrypoint.rest.controller.tag.request;
+package com.aoodax.platform.entrypoint.rest.dto.tag.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

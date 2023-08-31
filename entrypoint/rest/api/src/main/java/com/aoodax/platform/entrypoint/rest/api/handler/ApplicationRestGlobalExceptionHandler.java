@@ -1,4 +1,4 @@
-package com.aoodax.platform.entrypoint.rest.exception.handler;
+package com.aoodax.platform.entrypoint.rest.api.handler;
 
 import com.aoodax.jvm.common.rest.dto.response.error.ErrorReasonResponseModel;
 import com.aoodax.jvm.common.rest.dto.response.error.ErrorResponseModel;

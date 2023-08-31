@@ -1,4 +1,4 @@
-package com.aoodax.platform.entrypoint.rest.controller.tag.response;
+package com.aoodax.platform.entrypoint.rest.dto.tag.response;
 
 import com.aoodax.jvm.common.rest.dto.response.grid.response.AbstractGridAwareResponse;
 import lombok.Builder;

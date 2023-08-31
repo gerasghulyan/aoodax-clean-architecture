@@ -1,0 +1,5 @@
+dependencies {
+    api "com.aoodax.jvm.common:rest-dto"
+    api "io.swagger.core.v3:swagger-annotations-jakarta"
+    api "org.springframework.boot:spring-boot-starter-validation"
+}

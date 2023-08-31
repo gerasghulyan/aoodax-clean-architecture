@@ -1,4 +1,4 @@
-package com.aoodax.platform.entrypoint.rest.controller.tag;
+package com.aoodax.platform.entrypoint.rest.api.controller.tag;
 
 import com.aoodax.jvm.common.rest.dto.request.PageableRequest;
 import com.aoodax.jvm.common.rest.dto.response.uid.UidAwareResponse;
@@ -12,10 +12,10 @@ import com.aoodax.platform.contract.input.tag.dto.CreateTagDto;
 import com.aoodax.platform.contract.input.tag.dto.TagGridResponseDto;
 import com.aoodax.platform.contract.input.tag.dto.UpdateTagDto;
 import com.aoodax.platform.contract.model.tag.TagModel;
-import com.aoodax.platform.entrypoint.rest.controller.tag.request.CreateTagRequest;
-import com.aoodax.platform.entrypoint.rest.controller.tag.request.UpdateTagRequest;
-import com.aoodax.platform.entrypoint.rest.controller.tag.response.TagGridResponse;
-import com.aoodax.platform.entrypoint.rest.controller.tag.response.TagResponse;
+import com.aoodax.platform.entrypoint.rest.dto.tag.request.CreateTagRequest;
+import com.aoodax.platform.entrypoint.rest.dto.tag.request.UpdateTagRequest;
+import com.aoodax.platform.entrypoint.rest.dto.tag.response.TagGridResponse;
+import com.aoodax.platform.entrypoint.rest.dto.tag.response.TagResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

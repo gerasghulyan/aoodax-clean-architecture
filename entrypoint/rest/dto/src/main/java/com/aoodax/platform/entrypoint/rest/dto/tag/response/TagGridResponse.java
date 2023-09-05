@@ -8,9 +8,10 @@ import java.util.List;
 
 @Getter
 public class TagGridResponse extends AbstractGridAwareResponse<TagResponse> {
- 
+
     @Builder
-    public TagGridResponse(final List<TagResponse> data, final long total) {
+    public TagGridResponse(final List<TagResponse> data,
+                           final long total) {
         super(data, total);
     }
 }

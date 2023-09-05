@@ -6,14 +6,7 @@ plugins {
 // spring boot version is defined in buildSrc/build.gradle file, spring version is inferred from that.
 
 project.ext {
-    aoodaxCommonsMongoDbVersion = '0.0.1'
-    aoodaxCommonsUtilsVersion = '0.0.1'
-    aoodaxCommonsTestLocalstackVersion = '0.0.1'
-    aoodaxCommonsUnitTestVersion = '0.0.1'
-    aoodaxCommonsTestToolkitVersion = '0.0.1'
-    aoodaxCommonsQueueProducerVersion = '0.0.1'
-    aoodaxCommonsQueueMessageVersion = '0.0.1'
-    aoodaxCommonsRestDtoVersion = '0.0.1'
+    aoodaxCommonsVersion = '0.0.1'
     springCloudVersion = '2022.0.0'
     messagingVersion = "2.2.6.RELEASE"
     lombokVersion = '1.18.24'
@@ -25,6 +18,7 @@ project.ext {
     jetbrainsAnnotationsVersion = '17.0.0'
     commonsLang3Version = '3.12.0'
     jakartaAnnotationVersion = '2.1.1'
+    mapstructVersion = '1.5.5.Final'
     findbugsJsr305Version = '3.0.2'
     archunitJunit5Version = '1.0.0'
     junitJupiterVersion = '5.9.0'
@@ -47,14 +41,17 @@ dependencies {
     implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
 
     constraints {
-        implementation "com.aoodax.jvm.common:utils:$aoodaxCommonsUtilsVersion"
-        implementation "com.aoodax.jvm.common:persistence-mongo:$aoodaxCommonsUtilsVersion"
-        implementation "com.aoodax.jvm.common:queue-producer:$aoodaxCommonsUtilsVersion"
-        implementation "com.aoodax.jvm.common:queue-message:$aoodaxCommonsUtilsVersion"
-        implementation "com.aoodax.jvm.common:test-toolkit:$aoodaxCommonsUtilsVersion"
-        implementation "com.aoodax.jvm.common:rest-dto:$aoodaxCommonsRestDtoVersion"
+        implementation "com.aoodax.jvm.common:utils:$aoodaxCommonsVersion"
+        implementation "com.aoodax.jvm.common:persistence-mongo:$aoodaxCommonsVersion"
+        implementation "com.aoodax.jvm.common:queue-producer:$aoodaxCommonsVersion"
+        implementation "com.aoodax.jvm.common:queue-message:$aoodaxCommonsVersion"
+        implementation "com.aoodax.jvm.common:test-toolkit:$aoodaxCommonsVersion"
+        implementation "com.aoodax.jvm.common:rest-dto:$aoodaxCommonsVersion"
+        implementation "com.aoodax.jvm.common:integration-test-mongo:$aoodaxCommonsVersion"
 
         implementation "jakarta.annotation:jakarta.annotation-api:$jakartaAnnotationVersion"
+        implementation "org.mapstruct:mapstruct:$mapstructVersion"
+        annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
         implementation "com.google.code.findbugs:jsr305:$findbugsJsr305Version"
         implementation "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
         implementation "io.github.resilience4j:resilience4j-bulkhead:$resilience4jBulkheadVersion"
@@ -65,9 +62,9 @@ dependencies {
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-        testImplementation "com.aoodax.jvm.common:integration-test-localstack:$aoodaxCommonsTestLocalstackVersion"
-        testImplementation "com.aoodax.jvm.common:unit-test:$aoodaxCommonsUnitTestVersion"
-        testImplementation "com.aoodax.jvm.common:test-toolkit:$aoodaxCommonsTestToolkitVersion"
+        testImplementation "com.aoodax.jvm.common:unit-test:$aoodaxCommonsVersion"
+        testImplementation "com.aoodax.jvm.common:test-toolkit:$aoodaxCommonsVersion"
+
         testImplementation "org.mockito:mockito-junit-jupiter:$mockitoJunitJupiterVersion"
         testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
         testImplementation "com.tngtech.archunit:archunit-junit5:$archunitJunit5Version"

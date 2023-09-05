@@ -1,7 +1,6 @@
 package com.aoodax.platform.contract.input.common;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,14 +12,13 @@ import static com.aoodax.jvm.common.utils.validation.ParameterValidator.assertHa
 @EqualsAndHashCode
 @ToString
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class ContentAwareDto {
+public abstract class ContentAwareDto {
 
     String alias;
     String name;
     StatusDto status;
     String description;
 
-    @Builder(setterPrefix = "with")
     public ContentAwareDto(
             final String alias,
             final String name,

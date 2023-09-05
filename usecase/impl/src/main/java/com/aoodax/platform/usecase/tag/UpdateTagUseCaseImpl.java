@@ -1,14 +1,12 @@
 package com.aoodax.platform.usecase.tag;
 
-import com.aoodax.platform.contract.input.exception.DbException;
 import com.aoodax.platform.contract.input.exception.AlreadyExistsException;
+import com.aoodax.platform.contract.input.exception.DbException;
 import com.aoodax.platform.contract.input.exception.NotFoundException;
+import com.aoodax.platform.contract.input.output.tag.TagRepository;
 import com.aoodax.platform.contract.input.tag.UpdateTagUseCase;
 import com.aoodax.platform.contract.input.tag.dto.UpdateTagDto;
 import com.aoodax.platform.contract.model.tag.TagModel;
-import com.aoodax.platform.contract.output.tag.TagRepository;
-import com.aoodax.platform.contract.output.tag.mapper.TagModelDocumentMapper;
-import com.aoodax.platform.infrastructure.domain.entity.organization.tag.TagEntity;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,34 +26,32 @@ public class UpdateTagUseCaseImpl implements UpdateTagUseCase {
 
     @Override
     public final TagModel update(final UpdateTagDto dto) {
-        assertNotNullParameterArgument(dto, "UpdateTagDto");
+        assertNotNullParameterArgument(dto, "dto");
 
-        final TagEntity tagEntity = findTagByUidOrThrow(dto.getUid());
-        assertTagDoesNotConflictWithName(dto.getName(), tagEntity);
-        return updateAndSaveTag(dto, tagEntity);
+        final TagModel model = findTagByUidOrThrow(dto.getUid());
+        assertTagDoesNotConflictWithName(dto.getName(), model);
+        return updateAndSaveTag(dto, model);
     }
 
-    private TagEntity findTagByUidOrThrow(final String uid) {
+    private TagModel findTagByUidOrThrow(final String uid) {
         return tagRepository.getByUid(uid)
                 .orElseThrow(() -> new NotFoundException(format("The Tag not found for uid: %s", uid)));
     }
 
     private void assertTagDoesNotConflictWithName(final String tagName,
-                                                  final TagEntity currentTagEntity) {
+                                                  final TagModel model) {
         tagRepository.getByName(tagName)
-                .filter(tag -> !tag.getUid().equals(currentTagEntity.getUid()))
+                .filter(tag -> !tag.getUid().equals(model.getUid()))
                 .ifPresent(tag -> {
                     throw new AlreadyExistsException(format("The Tag already exists for name: %s", tagName));
                 });
     }
 
     private TagModel updateAndSaveTag(final UpdateTagDto dto,
-                                      final TagEntity entity) {
+                                      final TagModel model) {
         log.debug("Update tag for dto: {}", dto);
-        final TagModel model = TagModelDocumentMapper.toModel(entity);
-        model.updateName(dto.getName());
+        model.update(dto.getName());
         return tagRepository.update(model)
-                .map(TagModelDocumentMapper::toModel)
                 .orElseThrow(() -> new DbException(format("Unexpected db exception happened during update of tag with uid: %s", dto.getUid())));
     }
 

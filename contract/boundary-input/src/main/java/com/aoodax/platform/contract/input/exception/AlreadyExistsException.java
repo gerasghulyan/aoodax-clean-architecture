@@ -2,7 +2,7 @@ package com.aoodax.platform.contract.input.exception;
 
 public class AlreadyExistsException extends AoodaxException {
     public AlreadyExistsException() {
-        this("Entity already exists");
+        this("Already exists");
     }
 
     public AlreadyExistsException(final String message) {

@@ -2,7 +2,7 @@ package com.aoodax.platform.contract.input.exception;
 
 public class ValidationException extends AoodaxException {
     public ValidationException() {
-        this("Entity Validation Exception");
+        this("Validation Exception");
     }
 
     public ValidationException(final String message) {

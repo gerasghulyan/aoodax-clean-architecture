@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 
 <!--
-    PMD rule sets for Disqo
+    PMD rule sets for AOODAX
 
     Read first before adding any modifications:
     https://pmd.github.io/latest/pmd_userdocs_making_rulesets.html
 -->
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        name="Disqo-ADM-Java-PMD"
+        name="AOODAX-Java-PMD"
         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
     <description>
-        PMD RuleSet for Disqo ADM Java development
+        PMD RuleSet for AOODAX Java development
     </description>
 
     <!-- Documentation for PMD Java rules: https://pmd.github.io/latest/pmd_rules_java.html -->

@@ -5,5 +5,5 @@ import com.aoodax.platform.contract.input.tag.dto.TagGridResponseDto;
 
 public interface FindTagsUseCase {
 
-    TagGridResponseDto find(final PaginationAwareDto paginationAwareDto);
+    TagGridResponseDto find(PaginationAwareDto paginationAwareDto);
 }

@@ -1,0 +1,18 @@
+project(":test-toolkit:unit") {
+    dependencies {
+        api 'com.aoodax.jvm.common:test-toolkit'
+        api project(":contract:boundary-input")
+        api project(":contract:model")
+        api project(":entrypoint:rest:dto")
+        api project(":infrastructure:domain")
+        api project(":infrastructure:messaging")
+        api 'org.mockito:mockito-junit-jupiter'
+    }
+}
+
+project(":test-toolkit:integration") {
+    dependencies {
+        implementation project(":test-toolkit:unit")
+        implementation "com.aoodax.jvm.common:integration-test-mongo"
+    }
+}

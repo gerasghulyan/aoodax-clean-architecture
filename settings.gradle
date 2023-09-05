@@ -26,7 +26,5 @@ include 'entrypoint:rest:dto'
 include 'entrypoint:queue:consumer'
 include 'entrypoint:queue:message'
 include 'entrypoint:integration-test'
-include "test-toolkit:contract-unit"
-include "test-toolkit:entrypoint-unit"
-include "test-toolkit:infrastructure-unit"
+include "test-toolkit:unit"
 include "test-toolkit:integration"

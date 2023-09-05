@@ -1,6 +1,8 @@
 dependencies {
     implementation project(":contract:boundary-output")
     implementation project(":infrastructure:domain")
-    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
     implementation project(":contract:model")
+    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
+    implementation "org.mapstruct:mapstruct"
+    annotationProcessor "org.mapstruct:mapstruct-processor"
 }

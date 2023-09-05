@@ -1,0 +1,8 @@
+dependencies {
+    testImplementation project(":configuration")
+    testImplementation project(":entrypoint:rest:api")
+    testImplementation project(":test-toolkit:integration")
+    testImplementation "com.aoodax.jvm.common:integration-test-mongo"
+    testImplementation project(":test-toolkit:unit")
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+}

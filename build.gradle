@@ -60,60 +60,33 @@ sonarqube {
     }
 }
 
-def environmentPlatformVersion(libraryVersion) {
-    def branch = getBranchName()
-    switch (branch) {
-        case "develop":
-            return "$libraryVersion-SNAPSHOT"
-        case "main":
-            return libraryVersion
-        default:
-            if (branch =~ /^release.*/) {
-                return "$libraryVersion-release-SNAPSHOT"
+task printModulesWithPackages {
+    doLast {
+        subprojects.sort { it.path }.each { project ->
+            // Calculate the depth based on the project's path.
+            def depth = project.path.split(':').length - 1
+            def indentation = ('-' * depth) + ' '
+
+            def mainSourceSet = project.sourceSets.main
+            if (mainSourceSet != null) {
+                def packageName = ''
+                def packageDir = mainSourceSet.java.srcDirs.find { it.exists() }
+                if (packageDir != null) {
+                    def allFiles = packageDir.listFiles()
+                    if (allFiles != null) {
+                        def firstJavaFile = allFiles.find { it.name.endsWith('.java') || it.name.endsWith('.kt') }
+                        if (firstJavaFile != null) {
+                            firstJavaFile.eachLine { line ->
+                                if (line.startsWith('package ')) {
+                                    packageName = line.replaceAll('package ', '').replaceAll(';', '').trim()
+                                    return
+                                }
+                            }
+                        }
+                    }
+                }
+                println "$indentation${project.name}: $packageName"
             }
-            return "$libraryVersion-SNAPSHOT"
+        }
     }
 }
-
-private String getBranchName() {
-    return "develop"
-//    System.getenv("ci_commit_branch") ?: grgit.getBranch().current().name //TODO uncomment
-}
-
-//plugins {
-//    id 'java'
-//    id 'org.springframework.boot' version '3.1.2'
-//    id 'io.spring.dependency-management' version '1.1.2'
-//}
-//
-//group = 'am.urgnam'
-//version = '0.0.1-SNAPSHOT'
-//
-//java {
-//    sourceCompatibility = '17'
-//}
-//
-//repositories {
-//    mavenCentral()
-//}
-//
-//dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-//    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-//    implementation 'org.springframework.boot:spring-boot-starter-web'
-//    
-//    compileOnly 'org.projectlombok:lombok'
-//    annotationProcessor 'org.projectlombok:lombok'
-//    
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//}
-//
-//tasks.named('test') {
-//    useJUnitPlatform()
-//}
-//
-//task printJavaVersion {
-//    doLast {
-//        System.out.println("Java version: " + JavaVersion.current());
-//    }
-//}

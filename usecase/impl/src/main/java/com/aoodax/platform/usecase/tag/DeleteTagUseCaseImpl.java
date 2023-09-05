@@ -1,11 +1,9 @@
 package com.aoodax.platform.usecase.tag;
 
 import com.aoodax.platform.contract.input.exception.NotFoundException;
+import com.aoodax.platform.contract.input.output.tag.TagRepository;
 import com.aoodax.platform.contract.input.tag.DeleteTagUseCase;
 import com.aoodax.platform.contract.model.tag.TagModel;
-import com.aoodax.platform.contract.output.tag.TagRepository;
-import com.aoodax.platform.contract.output.tag.mapper.TagModelDocumentMapper;
-import com.aoodax.platform.infrastructure.domain.entity.organization.tag.TagEntity;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,9 +26,7 @@ public class DeleteTagUseCaseImpl implements DeleteTagUseCase {
         assertHasTextParameterArgument(uid, "uid");
 
         log.debug("Deleting tag for uid: {}", uid);
-        final TagEntity tagEntity = tagRepository.markAsRemoved(uid)
+        return tagRepository.markAsRemoved(uid)
                 .orElseThrow(() -> new NotFoundException(format("The Tag not found for uid: %s", uid)));
-        log.debug("Tag Successfully deleted with entity: {}", tagEntity);
-        return TagModelDocumentMapper.toModel(tagEntity);
     }
 }

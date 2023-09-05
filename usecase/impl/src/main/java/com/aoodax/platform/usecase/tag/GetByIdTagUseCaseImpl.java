@@ -1,10 +1,9 @@
 package com.aoodax.platform.usecase.tag;
 
 import com.aoodax.platform.contract.input.exception.NotFoundException;
+import com.aoodax.platform.contract.input.output.tag.TagRepository;
 import com.aoodax.platform.contract.input.tag.GetByIdTagUseCase;
 import com.aoodax.platform.contract.model.tag.TagModel;
-import com.aoodax.platform.contract.output.tag.TagRepository;
-import com.aoodax.platform.contract.output.tag.mapper.TagModelDocumentMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,7 +27,6 @@ public class GetByIdTagUseCaseImpl implements GetByIdTagUseCase {
 
         log.debug("Retrieving tag for uid: {}", uid);
         return tagRepository.getByUid(uid)
-                .map(TagModelDocumentMapper::toModel)
                 .orElseThrow(() -> new NotFoundException(format("The Tag not found for uid: %s", uid)));
     }
 }

@@ -14,7 +14,7 @@ public class DbException extends AoodaxException {
     }
 
     public DbException(final String message,
-                                   final Throwable cause) {
+                       final Throwable cause) {
         super(message, cause);
     }
 }

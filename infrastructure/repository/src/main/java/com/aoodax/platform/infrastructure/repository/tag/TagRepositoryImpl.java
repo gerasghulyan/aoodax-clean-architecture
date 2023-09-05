@@ -1,9 +1,9 @@
 package com.aoodax.platform.infrastructure.repository.tag;
 
+import com.aoodax.platform.contract.input.output.tag.TagRepository;
 import com.aoodax.platform.contract.model.tag.TagModel;
-import com.aoodax.platform.contract.output.tag.TagRepository;
-import com.aoodax.platform.contract.output.tag.mapper.TagModelDocumentMapper;
 import com.aoodax.platform.infrastructure.domain.entity.organization.tag.TagEntity;
+import com.aoodax.platform.infrastructure.repository.tag.mapper.TagMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,75 +30,75 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class TagRepositoryImpl implements TagRepository {
 
     MongoOperations mongoOperations;
+    TagMapper tagMapper;
 
     @Override
-    public TagEntity create(final TagModel model) {
+    public TagModel create(final TagModel model) {
         assertNotNullParameterArgument(model, "model");
 
-        final TagEntity entity = TagModelDocumentMapper.toDocument(model);
+        final TagEntity entity = tagMapper.toEntity(model);
         log.debug("Persisting tag for entity: {}", entity);
-        return mongoOperations.save(entity);
+        final TagEntity created = mongoOperations.save(entity);
+        log.debug("Tag successfully created for model: {} with result - {}", model, created);
+        return tagMapper.toModel(created);
     }
 
     @Override
-    public Optional<TagEntity> getByUid(final String uid) {
+    public Optional<TagModel> getByUid(final String uid) {
         assertHasTextParameterArgument(uid, "uid");
 
-        final Query query = new Query().addCriteria(
-                where("_id").is(uid)
-                        .andOperator(where("is_deleted").is(false))
-        );
-        return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class));
+        return findByUid(uid).map(tagMapper::toModel);
     }
 
     @Override
-    public Optional<TagEntity> getByName(final String name) {
+    public Optional<TagModel> getByName(final String name) {
         assertHasTextParameterArgument(name, "name");
 
-        final Query query = new Query().addCriteria(
-                where("name").is(name)
-                        .andOperator(where("is_deleted").is(false))
-        );
-        return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class));
+        final Query query = new Query().addCriteria(where("name").is(name).andOperator(where("is_deleted").is(false)));
+        return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class)).map(tagMapper::toModel);
     }
 
     @Override
-    public Optional<TagEntity> markAsRemoved(final String uid) {
+    public Optional<TagModel> markAsRemoved(final String uid) {
         assertHasTextParameterArgument(uid, "uid");
 
-        return getByUid(uid).map(tagEntity -> {
+        return findByUid(uid).map(tagEntity -> {
             tagEntity.setDeleted(true);
             return mongoOperations.save(tagEntity);
-        });
+        }).map(tagMapper::toModel);
     }
 
     @Override
-    public Optional<TagEntity> update(final TagModel model) {
+    public Optional<TagModel> update(final TagModel model) {
         assertNotNullParameterArgument(model, "model");
-        
+
         final Update update = new Update();
         update.set("name", model.getName());
-        return getByUid(model.getUid()).map(tagEntity -> {
+        return findByUid(model.getUid()).map(tagEntity -> {
             tagEntity.setName(model.getName());
             return mongoOperations.save(tagEntity);
-        });
+        }).map(tagMapper::toModel);
     }
 
     @Override
-    public Page<TagEntity> find(final Pageable pageable) {
+    public Page<TagModel> find(final Pageable pageable) {
         assertNotNullParameterArgument(pageable, "pageable");
-        
+
         log.debug("Executing get tags method with page info - {}", pageable);
         final Query query = new Query()
-                .with(Sort.by("createdAt").descending());
+                .with(Sort.by("created_at").descending())
+                .addCriteria(where("is_deleted").is(false));
         final long count = mongoOperations.count(query, TagEntity.class);
         query.with(pageable);
-        final Page<TagEntity> page = PageableExecutionUtils.getPage(
-                mongoOperations.find(query, TagEntity.class),
-                pageable,
-                () -> count
-        );
+        final Page<TagModel> page = PageableExecutionUtils.getPage(mongoOperations.find(query, TagEntity.class), pageable, () -> count).map(tagMapper::toModel);
         log.debug("Successfully executed get tags with page info - {}", pageable);
         return page;
+    }
+
+    private Optional<TagEntity> findByUid(final String uid) {
+        assertHasTextParameterArgument(uid, "uid");
+
+        final Query query = new Query().addCriteria(where("_id").is(uid).andOperator(where("is_deleted").is(false)));
+        return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class));
     }
 }

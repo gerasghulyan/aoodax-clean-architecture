@@ -23,6 +23,7 @@ public class CoordinatesDto {
                           final Double lng) {
         assertNotNullParameterArgument(lat, "lat");
         assertNotNullParameterArgument(lng, "lng");
+
         this.lat = lat;
         this.lng = lng;
     }

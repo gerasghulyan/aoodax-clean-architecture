@@ -3,17 +3,12 @@ package com.aoodax.platform.entrypoint.rest.dto.tag.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.experimental.FieldDefaults;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode
-@ToString
-@Getter
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class UpdateTagRequest {
 

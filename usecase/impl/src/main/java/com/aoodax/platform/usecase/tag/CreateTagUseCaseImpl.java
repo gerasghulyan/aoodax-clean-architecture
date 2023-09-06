@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.aoodax.jvm.common.utils.validation.ParameterValidator.assertNotNullParameterArgument;
 import static java.lang.String.format;
@@ -23,6 +24,7 @@ public class CreateTagUseCaseImpl implements CreateTagUseCase {
     TagRepository tagRepository;
 
     @Override
+    @Transactional
     public TagModel create(final CreateTagDto dto) {
         assertNotNullParameterArgument(dto, "CreateTagRequestDto");
         validateDto(dto);

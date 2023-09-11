@@ -28,8 +28,8 @@ public class UpdateTagUseCaseImpl implements UpdateTagUseCase {
     public final TagModel update(final UpdateTagDto dto) {
         assertNotNullParameterArgument(dto, "dto");
 
-        final TagModel model = findTagByUidOrThrow(dto.getUid());
-        assertTagDoesNotConflictWithName(dto.getName(), model);
+        final TagModel model = findTagByUidOrThrow(dto.uid());
+        assertTagDoesNotConflictWithName(dto.name(), model);
         return updateAndSaveTag(dto, model);
     }
 
@@ -50,9 +50,9 @@ public class UpdateTagUseCaseImpl implements UpdateTagUseCase {
     private TagModel updateAndSaveTag(final UpdateTagDto dto,
                                       final TagModel model) {
         log.debug("Update tag for dto: {}", dto);
-        model.update(dto.getName());
+        model.update(dto.name());
         return tagRepository.update(model)
-                .orElseThrow(() -> new DbException(format("Unexpected db exception happened during update of tag with uid: %s", dto.getUid())));
+                .orElseThrow(() -> new DbException(format("Unexpected db exception happened during update of tag with uid: %s", dto.uid())));
     }
 
 }

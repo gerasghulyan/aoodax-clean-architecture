@@ -3,7 +3,7 @@ package com.aoodax.platform.infrastructure.repository.tag;
 import com.aoodax.platform.contract.input.output.tag.TagRepository;
 import com.aoodax.platform.contract.model.tag.TagModel;
 import com.aoodax.platform.infrastructure.domain.entity.organization.tag.TagEntity;
-import com.aoodax.platform.infrastructure.repository.tag.mapper.TagMapper;
+import com.aoodax.platform.infrastructure.repository.tag.mapper.TagPersistenceMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,24 +30,24 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class TagRepositoryImpl implements TagRepository {
 
     MongoOperations mongoOperations;
-    TagMapper tagMapper;
+    TagPersistenceMapper tagPersistenceMapper;
 
     @Override
     public TagModel create(final TagModel model) {
         assertNotNullParameterArgument(model, "model");
 
-        final TagEntity entity = tagMapper.toEntity(model);
+        final TagEntity entity = tagPersistenceMapper.toEntity(model);
         log.debug("Persisting tag for entity: {}", entity);
         final TagEntity created = mongoOperations.save(entity);
         log.debug("Tag successfully created for model: {} with result - {}", model, created);
-        return tagMapper.toModel(created);
+        return tagPersistenceMapper.toModel(created);
     }
 
     @Override
     public Optional<TagModel> getByUid(final String uid) {
         assertHasTextParameterArgument(uid, "uid");
 
-        return findByUid(uid).map(tagMapper::toModel);
+        return findByUid(uid).map(tagPersistenceMapper::toModel);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class TagRepositoryImpl implements TagRepository {
         assertHasTextParameterArgument(name, "name");
 
         final Query query = new Query().addCriteria(where("name").is(name).andOperator(where("is_deleted").is(false)));
-        return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class)).map(tagMapper::toModel);
+        return Optional.ofNullable(mongoOperations.findOne(query, TagEntity.class)).map(tagPersistenceMapper::toModel);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class TagRepositoryImpl implements TagRepository {
         return findByUid(uid).map(tagEntity -> {
             tagEntity.setDeleted(true);
             return mongoOperations.save(tagEntity);
-        }).map(tagMapper::toModel);
+        }).map(tagPersistenceMapper::toModel);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class TagRepositoryImpl implements TagRepository {
         return findByUid(model.getUid()).map(tagEntity -> {
             tagEntity.setName(model.getName());
             return mongoOperations.save(tagEntity);
-        }).map(tagMapper::toModel);
+        }).map(tagPersistenceMapper::toModel);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class TagRepositoryImpl implements TagRepository {
                 .addCriteria(where("is_deleted").is(false));
         final long count = mongoOperations.count(query, TagEntity.class);
         query.with(pageable);
-        final Page<TagModel> page = PageableExecutionUtils.getPage(mongoOperations.find(query, TagEntity.class), pageable, () -> count).map(tagMapper::toModel);
+        final Page<TagModel> page = PageableExecutionUtils.getPage(mongoOperations.find(query, TagEntity.class), pageable, () -> count).map(tagPersistenceMapper::toModel);
         log.debug("Successfully executed get tags with page info - {}", pageable);
         return page;
     }

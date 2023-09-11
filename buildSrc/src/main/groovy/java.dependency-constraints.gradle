@@ -6,7 +6,7 @@ plugins {
 // spring boot version is defined in buildSrc/build.gradle file, spring version is inferred from that.
 
 project.ext {
-    aoodaxCommonsVersion = '0.0.1'
+    aoodaxCommonsVersion = '0.0.4-SNAPSHOT'
     springCloudVersion = '2022.0.0'
     messagingVersion = "2.2.6.RELEASE"
     lombokVersion = '1.18.24'

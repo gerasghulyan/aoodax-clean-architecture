@@ -5,6 +5,7 @@ import com.aoodax.platform.contract.model.common.Model;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -12,6 +13,7 @@ import static com.aoodax.jvm.common.utils.validation.ParameterValidator.assertHa
 
 @Getter
 @EqualsAndHashCode
+@ToString
 public class TagModel implements Model {
 
     private final String uid;

@@ -97,7 +97,7 @@ class TagControllerUnitTest : AbstractEntryPointApiUnitTest() {
     @Test
     fun `should successfully find tags`() {
         val request = buildPageableRequest(page = 1, size = 3)
-        val dto = buildPaginationAwareDto(page = request.page, size = request.size)
+        val dto = buildPaginationAwareDto(page = request.page - 1, size = request.size)
         val models = listOf(buildTagModel(), buildTagModel(), buildTagModel(), buildTagModel())
         val response = buildTagGridResponseDto(models, models.size.toLong())
 

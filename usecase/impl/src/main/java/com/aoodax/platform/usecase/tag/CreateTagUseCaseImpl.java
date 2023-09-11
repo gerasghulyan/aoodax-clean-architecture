@@ -26,18 +26,18 @@ public class CreateTagUseCaseImpl implements CreateTagUseCase {
     @Override
     @Transactional
     public TagModel create(final CreateTagDto dto) {
-        assertNotNullParameterArgument(dto, "CreateTagRequestDto");
+        assertNotNullParameterArgument(dto, "dto");
         validateDto(dto);
 
         log.debug("Creating tag for dto: {}", dto);
-        final TagModel createTag = TagModel.builderForCreation().name(dto.getName()).build();
+        final TagModel createTag = TagModel.builderForCreation().name(dto.name()).build();
         return tagRepository.create(createTag);
     }
 
     private void validateDto(final CreateTagDto dto) {
         log.debug("Validating tag for dto: {}", dto);
-        tagRepository.getByName(dto.getName()).ifPresent(tagEntity -> {
-            throw new AlreadyExistsException(format("The Tag already exists for name: %s", dto.getName()));
+        tagRepository.getByName(dto.name()).ifPresent(tagEntity -> {
+            throw new AlreadyExistsException(format("The Tag already exists for name: %s", dto.name()));
         });
     }
 }

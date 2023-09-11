@@ -55,9 +55,7 @@ public class TagController {
     @Operation(description = "Create")
     public TagResponse create(@Valid @RequestBody final CreateTagRequest request) {
         log.info("Creating tag for request: {}", request);
-        final CreateTagDto dto = CreateTagDto.builder()
-                .name(request.getName())
-                .build();
+        final CreateTagDto dto = CreateTagDto.builder().name(request.name()).build();
         final TagModel tag = createTagUseCase.create(dto);
         log.info("Tag successfully created with model: {}", tag);
         return convertTagModelToResponse(tag);
@@ -79,7 +77,7 @@ public class TagController {
     public TagGridResponse find(@Valid @RequestBody final PageableRequest request) {
         log.info("Retrieving all tags with pagination for request - {}", request);
         final PaginationAwareDto paginationAwareDto = PaginationAwareDto.builder()
-                .page(request.getPage())
+                .page(request.getPage() - 1)
                 .size(request.getSize())
                 .build();
         final TagGridResponseDto tags = findTagsUseCase.find(paginationAwareDto);
@@ -96,10 +94,7 @@ public class TagController {
     public TagResponse update(@Valid @PathVariable final String uid,
                               @Valid @RequestBody final UpdateTagRequest request) {
         log.info("Update tag for request: {}", request);
-        final UpdateTagDto dto = UpdateTagDto.builder()
-                .uid(uid)
-                .name(request.getName())
-                .build();
+        final UpdateTagDto dto = UpdateTagDto.builder().uid(uid).name(request.name()).build();
         final TagModel tag = updateTagUseCase.update(dto);
         log.info("Tag successfully updated with model: {}", tag);
         return convertTagModelToResponse(tag);

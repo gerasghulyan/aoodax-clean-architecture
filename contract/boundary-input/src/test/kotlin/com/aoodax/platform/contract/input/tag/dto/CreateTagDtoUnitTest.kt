@@ -27,7 +27,7 @@ class CreateTagDtoUnitTest : AbstractContractUnitTest() {
         val name = Randomizer.generateRandomString()
         buildCreateTagDto(name = name).let {
             assertThat(it).isNotNull
-            assertThat(it.name).isNotBlank().isEqualTo(name)
+            assertThat(it.name()).isNotBlank().isEqualTo(name)
         }
     }
 }

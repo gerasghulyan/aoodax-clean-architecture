@@ -41,8 +41,8 @@ class UpdateTagDtoUnitTest : AbstractContractUnitTest() {
         val name = Randomizer.generateRandomString()
         buildUpdateTagDto(name = name, uid = uid).let {
             assertThat(it).isNotNull
-            assertThat(it.uid).isNotBlank().isEqualTo(uid)
-            assertThat(it.name).isNotBlank().isEqualTo(name)
+            assertThat(it.uid()).isNotBlank().isEqualTo(uid)
+            assertThat(it.name()).isNotBlank().isEqualTo(name)
         }
     }
 }

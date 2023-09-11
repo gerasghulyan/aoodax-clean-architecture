@@ -84,8 +84,8 @@ class TagModelUnitTest : AbstractModelUnitTest() {
     fun `test update should success`() {
         val model = buildTagModel()
         val dto = buildUpdateTagDto()
-        model.update(dto.name).let {
-            assertThat(model.name).isNotBlank().isEqualTo(dto.name)
+        model.update(dto.name()).let {
+            assertThat(model.name).isNotBlank().isEqualTo(dto.name())
         }
     }
 }
